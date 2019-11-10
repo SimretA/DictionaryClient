@@ -18,16 +18,19 @@ public class Client {
             dataInputStream = new DataInputStream(System.in);
             dataOutputStream = new DataOutputStream(socket.getOutputStream());
             objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
-            objectOutputStream.writeObject(new SocketObject(new Word(), "GET"));
-            objectOutputStream.close();
 
-            dataOutputStream.close();
-            dataInputStream.close();
-            socket.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+    }
+    public void sendRequest(SocketObject socketObject) throws IOException {
+        objectOutputStream.writeObject(socketObject);
+        objectOutputStream.close();
+
+        dataOutputStream.close();
+        dataInputStream.close();
+        socket.close();
     }
 
     public static void main(String[] args) {

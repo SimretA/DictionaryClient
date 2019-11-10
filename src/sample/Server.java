@@ -24,7 +24,7 @@ public class Server {
             );
             objectInputStream = new ObjectInputStream(socket.getInputStream());
             SocketObject socketObject = (SocketObject)objectInputStream.readObject();
-            System.out.println("Got Object method" + socketObject.getMethod());
+            System.out.println("Got Object method" + socketObject.getMethod() +" and word "+socketObject.getWord().word);
             socket.close();
             dataInputStream.close();
 

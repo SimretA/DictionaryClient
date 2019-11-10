@@ -9,7 +9,7 @@
 
 <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
    <children>
-      <Pane fx:id="definitionPane" layoutX="51.0" layoutY="117.0" prefHeight="242.0" prefWidth="423.0" style="-fx-border-color: #ccc; -fx-border-width: 3px;">
+      <Pane fx:id="definitionPane" layoutX="51.0" layoutY="117.0" prefHeight="242.0" prefWidth="423.0" style="-fx-border-color: #ccc; -fx-border-width: 3px;" visible="false">
          <children>
             <Text fx:id="wordOutput" layoutX="14.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="2.0" style="-fx-font-family: Ubuntu Light;" text="Word" wrappingWidth="317.7294921875">
                <font>
