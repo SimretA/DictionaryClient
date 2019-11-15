@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+    <children>
+        <Label layoutX="69.0" layoutY="149.0" prefHeight="25.0" prefWidth="113.0" text="Word *">
+            <font>
+                <Font name="SansSerif Italic" size="15.0" />
+            </font>
+        </Label>
+        <Label layoutX="69.0" layoutY="200.0" prefHeight="25.0" prefWidth="113.0" text="Definition *">
+            <font>
+                <Font name="SansSerif Italic" size="15.0" />
+            </font>
+        </Label>
+        <Label layoutX="69.0" layoutY="41.0" prefHeight="63.0" prefWidth="386.0" text="ADD WORD" textAlignment="CENTER">
+            <font>
+                <Font name="SansSerif Bold" size="54.0" />
+            </font>
+        </Label>
+        <TextField fx:id="word" layoutX="177.0" layoutY="149.0" prefHeight="26.0" prefWidth="291.0" />
+        <TextArea fx:id="definition" layoutX="177.0" layoutY="186.0" prefHeight="141.0" prefWidth="291.0" />
+        <Button layoutX="468.0" layoutY="345.0" mnemonicParsing="false" onMouseClicked="#addWord" prefHeight="36.0" prefWidth="68.0" style="-fx-background-color: #0c0;" text="Add" textFill="#f2e8e8" />
+        <Label fx:id="warning" layoutX="69.0" layoutY="107.0" prefHeight="16.0" prefWidth="291.0" text="All required fields must be filled" textFill="#ee0000" visible="false" />
+    </children>
+</AnchorPane>

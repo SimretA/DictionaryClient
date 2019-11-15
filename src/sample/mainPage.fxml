@@ -16,7 +16,7 @@
                   <Font size="58.0" />
                </font>
             </Text>
-            <Button layoutX="382.0" layoutY="13.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="27.0" style="-fx-background-color: #c00; -fx-background-radius: 900px; -fx-border-radius: 900px;" text="X" textFill="#eee8e8" />
+            <Button layoutX="382.0" layoutY="13.0" mnemonicParsing="false" onMouseClicked="#deleteWord" prefHeight="26.0" prefWidth="27.0" style="-fx-background-color: #c00; -fx-background-radius: 900px; -fx-border-radius: 900px;" text="X" textFill="#eee8e8" />
             <Text layoutX="11.0" layoutY="153.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: Chandas;" text="Definition definition Definition definition Definition definition Definition definition Definition definition" wrappingWidth="408.7294921875">
                <font>
                   <Font size="15.0" />
@@ -26,7 +26,7 @@
       </Pane>
       <TextField fx:id="wordInput" layoutX="51.0" layoutY="56.0" prefHeight="43.0" prefWidth="423.0" />
       <Button layoutX="398.0" layoutY="56.0" mnemonicParsing="false" onMouseClicked="#search" prefHeight="43.0" prefWidth="76.0" text="Search" />
-      <Button layoutX="412.0" layoutY="357.0" mnemonicParsing="false" prefHeight="52.0" prefWidth="72.0" style="-fx-background-color: #0c0; -fx-border-radius: 150px; -fx-background-radius: 150px;" text="+" textFill="#f8f1f1">
+      <Button layoutX="412.0" layoutY="357.0" mnemonicParsing="false" onMouseClicked="#openAddWordDialog" prefHeight="52.0" prefWidth="72.0" style="-fx-background-color: #0c0; -fx-border-radius: 150px; -fx-background-radius: 150px;" text="+" textFill="#f8f1f1">
          <font>
             <Font size="33.0" />
          </font>
