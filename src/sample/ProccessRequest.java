@@ -25,6 +25,7 @@ public class ProccessRequest extends Thread {
     public void run() {
         try {
             objectInputStream = new ObjectInputStream(this.socket.getInputStream());
+            objectOutputStream = new ObjectOutputStream(this.socket.getOutputStream());
             SocketObject socketObject = (SocketObject) objectInputStream.readObject();
             System.out.println("Got Object method" + socketObject.getMethod() + " and word " + socketObject.getWord().word);
 
@@ -50,18 +51,23 @@ public class ProccessRequest extends Thread {
                 Word word = new Word(socketObject.getWord().word,dictionary.getString(socketObject.getWord().word));
                 System.out.println(word.word+": "+ word.meaning);
                 //TODO check if word is found, send word to client
+                objectOutputStream.writeObject(new SocketObject(word, "OK"));
+                objectOutputStream.flush();
+                System.out.println("object sent");
 
 
                 break;
             case "POST":
                 JSONObject dictionary1 = getDictionary();
                 Word word1= socketObject.getWord();
-                if(true){ //TODO Check if word exists
+                if(true){ //TODO Check if word doesn't exists
                     addWord(dictionary1,socketObject.getWord());
-                    //TODO Send response
+                    objectOutputStream.writeObject(new SocketObject(word1, "OK"));
+                    objectOutputStream.flush();
                 }
                 else {
                     //TODO word already exists
+                    // TODO Send response
                 }
                 break;
             case "DELETE":
@@ -69,7 +75,8 @@ public class ProccessRequest extends Thread {
                 Word word2 = socketObject.getWord();
                 if(true){//TODO check if word exists
                     deleteWord(dictionary2, word2);
-                    //TODO Send response
+                    objectOutputStream.writeObject(new SocketObject(word2, "OK"));
+                    objectOutputStream.flush();
                 }
                 else{
                     //TODO do stuff

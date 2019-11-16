@@ -43,16 +43,6 @@ public class Server {
     }
 
 
-    private void getMethod(Word word){
-
-    }
-
-    private void deleteMethod(Word word){
-
-    }
-    private void postMethod(Word word){
-
-    }
     public static void main(String[] args) {
         Server server = new Server(5000);
     }

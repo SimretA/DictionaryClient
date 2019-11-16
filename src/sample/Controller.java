@@ -19,21 +19,32 @@ public class Controller {
     @FXML Pane definitionPane;
     @FXML TextField wordInput;
     @FXML Text wordOutput;
+    @FXML Text meaningOutput;
     @FXML TextField word;
     @FXML TextArea definition;
     @FXML Label warning;
+
+    private Word currentWord =null;
 
     public void search(MouseEvent mouseEvent) {
 
         Client client = new Client("127.0.0.1",5000);
         SocketObject socketObject = new SocketObject(new Word(wordInput.getText(),null),"GET");
         try {
-            client.sendRequest(socketObject);
+            Word word = client.sendRequest(socketObject);
+            currentWord = word;
+            System.out.println(word.word +": "+word.meaning);
+            wordOutput.setText(word.word.toUpperCase());
+            meaningOutput.setText(word.meaning.toUpperCase());
+            definitionPane.setVisible(true);
+
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
         //wordOutput.setText(wordInput.getText());
-        definitionPane.setVisible(true);
+
 
     }
 
@@ -63,21 +74,48 @@ public class Controller {
         Client client = new Client("127.0.0.1",5000);
         SocketObject socketObject = new SocketObject(new Word(word.getText(),definition.getText()),"POST");
         try {
-            client.sendRequest(socketObject);
+            Word word = client.sendRequest(socketObject);
+            if(word.word.equals(socketObject.getWord().word)){
+                System.out.println("WORD ADDED");//TODO add UI
+            }
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
         ((Node)(mouseEvent.getSource())).getScene().getWindow().hide();
 
     }
     public void deleteWord(MouseEvent mouseEvent){
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to Delete?", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to Delete?", ButtonType.YES, ButtonType.NO);
         alert.showAndWait();
 
         if (alert.getResult() == ButtonType.YES) {
-            //TODO send request
+            SocketObject socketObject = new SocketObject(currentWord,"DELETE");
+            Client client= new Client("127.0.0.1",5000);
+            try {
+                Word response = client.sendRequest(socketObject);
+                if(response.word.equals(currentWord.word)){
+                    System.out.println("word deleted");
+                    Alert alert1 = new Alert(Alert.AlertType.INFORMATION, "Word Deleted!",  ButtonType.OK);
+                    alert1.showAndWait();
+                    clearDefinitionPane();
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
 
         }
 
     }
+
+    private void clearDefinitionPane() {
+        this.definitionPane.setVisible(false);
+        this.wordInput.setText("");
+    }
+
+
 }
