@@ -1,18 +1,13 @@
 package sample;
 
 import javafx.scene.control.TextArea;
-import javafx.scene.text.Text;
 
-
-import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Server {
     private Socket socket = null;
     private ServerSocket serverSocket = null;
-    private DataInputStream dataInputStream =  null;
-    private ObjectInputStream objectInputStream =  null;
     private TextArea infoDisplay;
 
     public Server(int port){
@@ -22,15 +17,15 @@ public class Server {
             System.out.println("Server started at port " + port);
             //infoDisplay.setText(infoDisplay.getText() + "\n"+"Server started at port " + port);
 
+            int i = 0;
             while(true) {
 
                 socket = serverSocket.accept();
                 System.out.println("Client connected");
-                dataInputStream = new DataInputStream(
-                        new BufferedInputStream(socket.getInputStream())
-                );
 
-                Thread workerThread = new Thread(new ProccessRequest(socket,1));
+
+                i++;
+                Thread workerThread = new Thread(new ProccessRequest(socket,i));
                 workerThread.start();
 
 
