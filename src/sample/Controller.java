@@ -27,9 +27,10 @@ public class Controller {
 
     private Word currentWord =null;
 
+
     public void search(MouseEvent mouseEvent) {
 
-        Client client = new Client("127.0.0.1",5000);
+        Client client = Client.getClient();
         SocketObject socketObject = new SocketObject(new Word(wordInput.getText(),null),"GET");
         try {
             SocketObject search_response = client.sendRequest(socketObject);
@@ -40,7 +41,7 @@ public class Controller {
                 meaningOutput.setText(currentWord.meaning.toUpperCase());
                 deleteButton.setVisible(true);
             }
-            else if(search_response.getMethod().equals("NotFound")){//TODO word not found
+            else if(search_response.getMethod().equals("NotFound")){
                 wordOutput.setText(currentWord.word.toUpperCase());
                 meaningOutput.setText("Word not found".toUpperCase());
                 deleteButton.setVisible(false);
@@ -51,7 +52,11 @@ public class Controller {
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
+
             e.printStackTrace();
+        }
+        catch (Exception e){
+            System.out.println("something went wrong");
         }
         //wordOutput.setText(wordInput.getText());
 
@@ -81,15 +86,17 @@ public class Controller {
             return;
         }
 
-        Client client = new Client("127.0.0.1",5000);
+        Client client = Client.getClient();
         SocketObject socketObject = new SocketObject(new Word(word.getText(),definition.getText()),"POST");
         try {
             SocketObject add_response = client.sendRequest(socketObject);
             if(add_response.getMethod().equals("OK")){
-                System.out.println("WORD ADDED");//TODO add UI
+                Alert alert1 = new Alert(Alert.AlertType.INFORMATION, "Word successfully added",  ButtonType.OK);
+                alert1.showAndWait();
             }
             else if(add_response.getMethod().equals("AlreadyExists")){
-                System.out.println("Word already exits");//TODO add UI
+                Alert alert1 = new Alert(Alert.AlertType.INFORMATION, "Word already exists",  ButtonType.OK);
+                alert1.showAndWait();
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -113,7 +120,7 @@ public class Controller {
 
         if (alert.getResult() == ButtonType.YES) {
             SocketObject socketObject = new SocketObject(currentWord,"DELETE");
-            Client client= new Client("127.0.0.1",5000);
+            Client client= Client.getClient();
             try {
                 SocketObject response = client.sendRequest(socketObject);
                 if(response.getMethod().equals("OK")){

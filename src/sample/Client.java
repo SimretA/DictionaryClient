@@ -10,7 +10,16 @@ public class Client {
     private Socket socket = null;
     private ObjectOutputStream objectOutputStream = null;
     private ObjectInputStream objectInputStream = null;
-    public Client(String ipAddress, int port){
+    private static Client client = null;
+
+    public static Client getClient() {
+        if(client ==null){
+            client = new Client("127.0.0.1",5000);
+        }
+        return client;
+    }
+
+    private Client(String ipAddress, int port){
         try {
             socket = new Socket(ipAddress, port);
             System.out.println("Connected");
