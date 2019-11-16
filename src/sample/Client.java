@@ -1,5 +1,8 @@
 package sample;
 
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+
 import java.io.*;
 import java.net.Socket;
 
@@ -15,16 +18,18 @@ public class Client {
             objectInputStream = new ObjectInputStream(socket.getInputStream());
 
         } catch (IOException e) {
-            e.printStackTrace();
+            Alert alert1 = new Alert(Alert.AlertType.INFORMATION, "Connection Error.",  ButtonType.OK);
+            alert1.showAndWait();
         }
 
     }
-    public Word sendRequest(SocketObject socketObject) throws IOException, ClassNotFoundException {
+    public SocketObject sendRequest(SocketObject socketObject) throws IOException, ClassNotFoundException {
         objectOutputStream.writeObject(socketObject);
         objectOutputStream.flush();
         SocketObject socketObject1 = (SocketObject) objectInputStream.readObject();
+        //Word temp = socketObject1.getWord();
 
-        return socketObject1.getWord();
+        return socketObject1;
        // objectOutputStream.close();
 
 

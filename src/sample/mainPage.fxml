@@ -16,7 +16,7 @@
                   <Font size="58.0" />
                </font>
             </Text>
-            <Button layoutX="382.0" layoutY="13.0" mnemonicParsing="false" onMouseClicked="#deleteWord" prefHeight="26.0" prefWidth="27.0" style="-fx-background-color: #c00; -fx-background-radius: 900px; -fx-border-radius: 900px;" text="X" textFill="#eee8e8" />
+            <Button fx:id="deleteButton" layoutX="382.0" layoutY="13.0" mnemonicParsing="false" onMouseClicked="#deleteWord" prefHeight="26.0" prefWidth="27.0" style="-fx-background-color: #c00; -fx-background-radius: 900px; -fx-border-radius: 900px;" text="X" textFill="#eee8e8" visible="false" />
             <Text fx:id="meaningOutput" layoutX="11.0" layoutY="153.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: Chandas;" text="Definition definition Definition definition Definition definition Definition definition Definition definition" wrappingWidth="408.7294921875">
                <font>
                   <Font size="15.0" />

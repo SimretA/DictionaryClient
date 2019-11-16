@@ -48,41 +48,66 @@ public class ProccessRequest extends Thread {
         switch (method){
             case "GET":
                 JSONObject dictionary = getDictionary();
-                Word word = new Word(socketObject.getWord().word,dictionary.getString(socketObject.getWord().word));
-                System.out.println(word.word+": "+ word.meaning);
-                //TODO check if word is found, send word to client
-                objectOutputStream.writeObject(new SocketObject(word, "OK"));
-                objectOutputStream.flush();
-                System.out.println("object sent");
+                Word word= null;
+                SocketObject response = null;
+                try{
+                     word = new Word(socketObject.getWord().word,dictionary.getString(socketObject.getWord().word));
+                     response = new SocketObject(word, "OK");
+
+                }catch(JSONException e){
+                     word = new Word(socketObject.getWord().word,"");
+
+                    response = new SocketObject(word, "NotFound");
+                }
+                finally {
+                    System.out.println(word.word+": "+ word.meaning);
+                    objectOutputStream.writeObject(response);
+                    objectOutputStream.flush();
+                    System.out.println("object sent");
+                }
+
 
 
                 break;
             case "POST":
                 JSONObject dictionary1 = getDictionary();
                 Word word1= socketObject.getWord();
-                if(true){ //TODO Check if word doesn't exists
+                Word word_confirm_post;
+                SocketObject response_post = null;
+                try{
+                    word_confirm_post= new Word(socketObject.getWord().word,dictionary1.getString(word1.word));
+                    response_post = new SocketObject(word_confirm_post, "AlreadyExists");
+
+
+
+                }catch (JSONException e){
+                    response_post = new SocketObject(word1, "OK");
                     addWord(dictionary1,socketObject.getWord());
-                    objectOutputStream.writeObject(new SocketObject(word1, "OK"));
-                    objectOutputStream.flush();
+
+
                 }
-                else {
-                    //TODO word already exists
-                    // TODO Send response
+                finally {
+                    objectOutputStream.writeObject(response_post);
+                    objectOutputStream.flush();
                 }
                 break;
             case "DELETE":
                 JSONObject dictionary2 = getDictionary();
                 Word word2 = socketObject.getWord();
-                if(true){//TODO check if word exists
+                Word word_confirm_delete;
+                SocketObject response_delete = null;
+                try{
+                    word_confirm_delete= new Word(word2.word,dictionary2.getString(word2.word));
                     deleteWord(dictionary2, word2);
-                    objectOutputStream.writeObject(new SocketObject(word2, "OK"));
+                    response_delete = new SocketObject(word_confirm_delete, "OK");
+                }
+                catch (JSONException e){
+                    response_delete= new SocketObject(word2, "NotFound");
+                }
+                finally {
+                    objectOutputStream.writeObject(response_delete);
                     objectOutputStream.flush();
                 }
-                else{
-                    //TODO do stuff
-                }
-
-
                 break;
             default:
                 break;

@@ -23,6 +23,7 @@ public class Controller {
     @FXML TextField word;
     @FXML TextArea definition;
     @FXML Label warning;
+    @FXML Button deleteButton;
 
     private Word currentWord =null;
 
@@ -31,11 +32,20 @@ public class Controller {
         Client client = new Client("127.0.0.1",5000);
         SocketObject socketObject = new SocketObject(new Word(wordInput.getText(),null),"GET");
         try {
-            Word word = client.sendRequest(socketObject);
-            currentWord = word;
-            System.out.println(word.word +": "+word.meaning);
-            wordOutput.setText(word.word.toUpperCase());
-            meaningOutput.setText(word.meaning.toUpperCase());
+            SocketObject search_response = client.sendRequest(socketObject);
+            currentWord = search_response.getWord();
+
+            if(search_response.getMethod().equals("OK")){
+                wordOutput.setText(currentWord.word.toUpperCase());
+                meaningOutput.setText(currentWord.meaning.toUpperCase());
+                deleteButton.setVisible(true);
+            }
+            else if(search_response.getMethod().equals("NotFound")){//TODO word not found
+                wordOutput.setText(currentWord.word.toUpperCase());
+                meaningOutput.setText("Word not found".toUpperCase());
+                deleteButton.setVisible(false);
+            }
+
             definitionPane.setVisible(true);
 
         } catch (IOException e) {
@@ -74,9 +84,12 @@ public class Controller {
         Client client = new Client("127.0.0.1",5000);
         SocketObject socketObject = new SocketObject(new Word(word.getText(),definition.getText()),"POST");
         try {
-            Word word = client.sendRequest(socketObject);
-            if(word.word.equals(socketObject.getWord().word)){
+            SocketObject add_response = client.sendRequest(socketObject);
+            if(add_response.getMethod().equals("OK")){
                 System.out.println("WORD ADDED");//TODO add UI
+            }
+            else if(add_response.getMethod().equals("AlreadyExists")){
+                System.out.println("Word already exits");//TODO add UI
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -87,6 +100,14 @@ public class Controller {
 
     }
     public void deleteWord(MouseEvent mouseEvent){
+        //can't delete not found words
+        if(currentWord.meaning.equals("Not Found")){
+            Alert alert1 = new Alert(Alert.AlertType.INFORMATION, "Word Doesn't exist",  ButtonType.OK);
+            alert1.showAndWait();
+            //clearDefinitionPane();
+            return;
+
+        }
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to Delete?", ButtonType.YES, ButtonType.NO);
         alert.showAndWait();
 
@@ -94,10 +115,16 @@ public class Controller {
             SocketObject socketObject = new SocketObject(currentWord,"DELETE");
             Client client= new Client("127.0.0.1",5000);
             try {
-                Word response = client.sendRequest(socketObject);
-                if(response.word.equals(currentWord.word)){
+                SocketObject response = client.sendRequest(socketObject);
+                if(response.getMethod().equals("OK")){
                     System.out.println("word deleted");
                     Alert alert1 = new Alert(Alert.AlertType.INFORMATION, "Word Deleted!",  ButtonType.OK);
+                    alert1.showAndWait();
+                    clearDefinitionPane();
+                }
+                else if(response.getMethod().equals("NotFound")) {
+                    System.out.println("word doesn't exist anymore");
+                    Alert alert1 = new Alert(Alert.AlertType.INFORMATION, "Word doesn't exist anymore",  ButtonType.OK);
                     alert1.showAndWait();
                     clearDefinitionPane();
                 }
