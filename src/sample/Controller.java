@@ -30,7 +30,7 @@ public class Controller {
 
     public void search(MouseEvent mouseEvent) {
 
-        Client client = Client.getClient();
+        Client client = new Client(ClientUtility.address, ClientUtility.port);
         SocketObject socketObject = new SocketObject(new Word(wordInput.getText(),null),"GET");
         try {
             SocketObject search_response = client.sendRequest(socketObject);
@@ -86,7 +86,7 @@ public class Controller {
             return;
         }
 
-        Client client = Client.getClient();
+        Client client = new Client(ClientUtility.address, ClientUtility.port);
         SocketObject socketObject = new SocketObject(new Word(word.getText(),definition.getText()),"POST");
         try {
             SocketObject add_response = client.sendRequest(socketObject);
@@ -120,7 +120,7 @@ public class Controller {
 
         if (alert.getResult() == ButtonType.YES) {
             SocketObject socketObject = new SocketObject(currentWord,"DELETE");
-            Client client= Client.getClient();
+            Client client= new Client(ClientUtility.address, ClientUtility.port);
             try {
                 SocketObject response = client.sendRequest(socketObject);
                 if(response.getMethod().equals("OK")){

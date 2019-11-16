@@ -1,5 +1,7 @@
 package sample;
 
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -34,7 +36,8 @@ public class ProccessRequest extends Thread {
             this.objectInputStream.close();
 
         } catch (IOException e) {
-            e.printStackTrace();
+            Alert alert1 = new Alert(Alert.AlertType.INFORMATION, "File couldn't be accessed.",  ButtonType.OK);
+            alert1.showAndWait();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (JSONException e) {
@@ -118,14 +121,14 @@ public class ProccessRequest extends Thread {
 
 
     private JSONObject getDictionary() throws FileNotFoundException, JSONException {
-        JSONTokener jsonTokener = new JSONTokener(new FileReader("/home/simret/IdeaProjects/DictionaryClient/src/sample/word.json"));
+        JSONTokener jsonTokener = new JSONTokener(new FileReader(ServerUtility.filePath));
         JSONObject jsonObject = new JSONObject(jsonTokener);
         return jsonObject;
 
     }
     private void saveDictionary(JSONObject jsonObject) throws IOException {
         FileWriter fileWriter =  null;
-        fileWriter = new FileWriter("/home/simret/IdeaProjects/DictionaryClient/src/sample/word.json",false);
+        fileWriter = new FileWriter(ServerUtility.filePath,false);
         fileWriter.write(jsonObject.toString());
         fileWriter.flush();
         fileWriter.close();
