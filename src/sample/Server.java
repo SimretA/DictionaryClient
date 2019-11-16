@@ -6,22 +6,24 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Server {
+
+
     private Socket socket = null;
     private ServerSocket serverSocket = null;
-    private TextArea infoDisplay;
+    private static TextArea infoDisplay;
 
     public Server(int port){
-        this.infoDisplay = infoDisplay;
         try{
             serverSocket = new ServerSocket(port);
             System.out.println("Server started at port " + port);
-            //infoDisplay.setText(infoDisplay.getText() + "\n"+"Server started at port " + port);
+            infoDisplay.setText(infoDisplay.getText()+"\nServer started at port " + port);
 
             int i = 0;
             while(true) {
 
                 socket = serverSocket.accept();
                 System.out.println("Client connected");
+                infoDisplay.setText(infoDisplay.getText() + "\nClient Connected");
 
 
                 i++;
@@ -37,8 +39,15 @@ public class Server {
         }
     }
 
+    public static void  startServer(int port, TextArea infoDisplay) {
 
-    public static void main(String[] args) {
-        Server server = new Server(5000);
+
+        Server.infoDisplay = infoDisplay;
+        Server server = new Server(port);
     }
+
+
+//    public static void main(String[] args) {
+//        Server server = new Server(5000);
+//    }
 }
