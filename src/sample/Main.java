@@ -31,8 +31,18 @@ public class Main extends Application {
         primaryStage.setTitle("Find Meaning");
         primaryStage.setScene(new Scene(root, 500, 500));
         List<String> params = getParameters().getRaw();
+        if(params.size() != 2){
+            System.out.println("Invalid command line arguments, please provide Servers IP address and port");
+            System.exit(1);
+        }
         ClientUtility.address = params.get(0);
-        ClientUtility.port = Integer.parseInt(params.get(1));
+
+        try{
+            ClientUtility.port = Integer.parseInt(params.get(1));
+        }catch (NumberFormatException e){
+            System.out.println("Invalid port number.");
+            System.exit(1);
+        }
 
         primaryStage.show();
     }

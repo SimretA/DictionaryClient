@@ -21,7 +21,7 @@ public class ServerDisplay {
 
 
         connectButton.setDisable(true);
-        disconnectButton.setDisable(true);
+        disconnectButton.setDisable(false);
 
 
         portText.setText(String.valueOf(ServerUtility.port));
@@ -34,12 +34,7 @@ public class ServerDisplay {
 
     public void disconnectServer(MouseEvent mouseEvent) {
 
-        //workerThread.disco();
-        thread.stop();
-        infoDisplay.setText(infoDisplay.getText()+"\nConnection Lost.");
-
-        connectButton.setDisable(false);
-        disconnectButton.setDisable(true);
+        System.exit(0);
 
     }
 }

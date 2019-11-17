@@ -31,7 +31,18 @@ public class ServerView extends Application {
         primaryStage.setScene(new Scene(root, 600, 400));
 
         List<String> params = getParameters().getRaw();
-        ServerUtility.port = Integer.parseInt(params.get(0));
+        if(params.size() != 2){
+            System.out.println("Invalid command line arguments, please provide port and file path");
+            System.exit(1);
+        }
+
+        try{
+            ServerUtility.port = Integer.parseInt(params.get(0));
+        }catch(NumberFormatException e){
+            System.out.println("Invalid port number.");
+            System.exit(1);
+
+        }
         ServerUtility.filePath = params.get(1);
         primaryStage.show();
 
