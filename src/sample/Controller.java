@@ -22,14 +22,19 @@ public class Controller {
     @FXML Text meaningOutput;
     @FXML TextField word;
     @FXML TextArea definition;
-    @FXML Label warning;
+    @FXML Label warning, searchRequired;
     @FXML Button deleteButton;
 
     private Word currentWord =null;
 
 
     public void search(MouseEvent mouseEvent) {
+        if(wordInput.getText().trim().equals("")){
+            searchRequired.setVisible(true);
+            return;
+        }
 
+        searchRequired.setVisible(false);
         Client client = new Client(ClientUtility.address, ClientUtility.port);
         SocketObject socketObject = new SocketObject(new Word(wordInput.getText(),null),"GET");
         try {
@@ -38,7 +43,7 @@ public class Controller {
 
             if(search_response.getMethod().equals("OK")){
                 wordOutput.setText(currentWord.word.toUpperCase());
-                meaningOutput.setText(currentWord.meaning.toUpperCase());
+                meaningOutput.setText(currentWord.meaning.toLowerCase());
                 deleteButton.setVisible(true);
             }
             else if(search_response.getMethod().equals("NotFound")){

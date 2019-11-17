@@ -11,16 +11,18 @@ public class ServerDisplay {
     @FXML Button connectButton, disconnectButton;
     @FXML Text portText, fileText;
     Thread thread = null;
+    WorkerThread workerThread = null;
     public void connectServer(MouseEvent mouseEvent) {
-        WorkerThread workerThread = new WorkerThread(ServerUtility.port, infoDisplay);
+        workerThread = new WorkerThread(ServerUtility.port, infoDisplay);
         thread = new Thread(workerThread);
         thread.start();
 
         //thread.stop();
 
+
         connectButton.setDisable(true);
-        disconnectButton.setDisable(false);
-        disconnectButton.setVisible(false);
+        disconnectButton.setDisable(true);
+
 
         portText.setText(String.valueOf(ServerUtility.port));
         fileText.setText(ServerUtility.filePath);
@@ -32,6 +34,7 @@ public class ServerDisplay {
 
     public void disconnectServer(MouseEvent mouseEvent) {
 
+        //workerThread.disco();
         thread.stop();
         infoDisplay.setText(infoDisplay.getText()+"\nConnection Lost.");
 
@@ -53,6 +56,7 @@ class WorkerThread extends Thread{
     }
 
     public void disco(){
+        Server.stopServer();
 
     }
 }

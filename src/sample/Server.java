@@ -2,11 +2,13 @@ package sample;
 
 import javafx.scene.control.TextArea;
 
+import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Server {
 
+    private static Server server;
 
     private Socket socket = null;
     private ServerSocket serverSocket = null;
@@ -22,19 +24,19 @@ public class Server {
             while(true) {
 
                 socket = serverSocket.accept();
-                System.out.println("Client connected");
-                infoDisplay.setText(infoDisplay.getText() + "\nClient Connected");
+                infoDisplay.setText(infoDisplay.getText() + "\nRequest received");
 
 
                 i++;
-                Thread workerThread = new Thread(new ProccessRequest(socket,i));
+                Thread workerThread = new Thread(new ProccessRequest(socket,i, infoDisplay));
                 workerThread.start();
 
 
 
             }
         }catch (Exception e){
-            e.printStackTrace();
+            infoDisplay.setText(infoDisplay.getText()+"\nPort already in use");
+
 
         }
     }
@@ -43,9 +45,18 @@ public class Server {
 
 
         Server.infoDisplay = infoDisplay;
-        Server server = new Server(port);
+        server = new Server(port);
     }
 
+    public static void stopServer(){
+
+        try {
+            server.serverSocket.close();
+        } catch (IOException e) {
+            infoDisplay.setText(infoDisplay.getText()+"\nSomething went wrong");
+        }
+
+    }
 
 //    public static void main(String[] args) {
 //        Server server = new Server(5000);

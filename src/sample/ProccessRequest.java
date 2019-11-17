@@ -2,6 +2,7 @@ package sample;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.TextArea;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -12,14 +13,16 @@ import java.net.Socket;
 public class ProccessRequest extends Thread {
     private Socket socket;
     private  int numnber;
+    private TextArea infoDisplay;
 
 
     private ObjectInputStream objectInputStream = null;
     private ObjectOutputStream objectOutputStream = null;
 
-    public ProccessRequest(Socket socket, int number){
+    public ProccessRequest(Socket socket, int number, TextArea infoDisplay){
         this.socket = socket;
         this.numnber = number;
+        this.infoDisplay = infoDisplay;
 
     }
 
@@ -29,19 +32,25 @@ public class ProccessRequest extends Thread {
             objectInputStream = new ObjectInputStream(this.socket.getInputStream());
             objectOutputStream = new ObjectOutputStream(this.socket.getOutputStream());
             SocketObject socketObject = (SocketObject) objectInputStream.readObject();
-            System.out.println("Got Object method" + socketObject.getMethod() + " and word " + socketObject.getWord().word);
+           infoDisplay.setText(infoDisplay.getText()+"\nGot Object method" + socketObject.getMethod() + " and word " + socketObject.getWord().word.toLowerCase());
 
             parseSocketObject(socketObject);
             this.socket.close();
             this.objectInputStream.close();
 
         } catch (IOException e) {
-            Alert alert1 = new Alert(Alert.AlertType.INFORMATION, "File couldn't be accessed.",  ButtonType.OK);
-            alert1.showAndWait();
+            infoDisplay.setText(infoDisplay.getText()+"\nFile not found. Restart server with correct file.");
+            try {
+                socket.close();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            infoDisplay.setText(infoDisplay.getText()+"\nSomething went wrong:( Please restart server");
+
         } catch (JSONException e) {
-            e.printStackTrace();
+            infoDisplay.setText(infoDisplay.getText()+"\nSomething went wrong:( Please restart server");
+
         }
 
 
@@ -54,7 +63,7 @@ public class ProccessRequest extends Thread {
                 Word word= null;
                 SocketObject response = null;
                 try{
-                     word = new Word(socketObject.getWord().word,dictionary.getString(socketObject.getWord().word));
+                     word = new Word(socketObject.getWord().word.toLowerCase(),dictionary.getString(socketObject.getWord().word.toLowerCase()));
                      response = new SocketObject(word, "OK");
 
                 }catch(JSONException e){
@@ -66,7 +75,7 @@ public class ProccessRequest extends Thread {
                     System.out.println(word.word+": "+ word.meaning);
                     objectOutputStream.writeObject(response);
                     objectOutputStream.flush();
-                    System.out.println("object sent");
+                    infoDisplay.setText(infoDisplay.getText()+"\nResponse sent");
                 }
 
 
@@ -78,7 +87,7 @@ public class ProccessRequest extends Thread {
                 Word word_confirm_post;
                 SocketObject response_post = null;
                 try{
-                    word_confirm_post= new Word(socketObject.getWord().word,dictionary1.getString(word1.word));
+                    word_confirm_post= new Word(socketObject.getWord().word.toLowerCase(),dictionary1.getString(word1.word));
                     response_post = new SocketObject(word_confirm_post, "AlreadyExists");
 
 
@@ -92,6 +101,8 @@ public class ProccessRequest extends Thread {
                 finally {
                     objectOutputStream.writeObject(response_post);
                     objectOutputStream.flush();
+                    infoDisplay.setText(infoDisplay.getText()+"\nResponse sent");
+
                 }
                 break;
             case "DELETE":
@@ -110,6 +121,8 @@ public class ProccessRequest extends Thread {
                 finally {
                     objectOutputStream.writeObject(response_delete);
                     objectOutputStream.flush();
+                    infoDisplay.setText(infoDisplay.getText()+"\nResponse sent");
+
                 }
                 break;
             default:
@@ -138,12 +151,12 @@ public class ProccessRequest extends Thread {
     }
 
     private synchronized void addWord(JSONObject jsonObject, Word word1) throws JSONException, IOException {
-        jsonObject.put(word1.word, word1.meaning);
+        jsonObject.put(word1.word.toLowerCase(), word1.meaning);
         saveDictionary(jsonObject);
         System.out.println("Word added");
     }
     private synchronized void deleteWord(JSONObject jsonObject, Word word) throws IOException {
-        jsonObject.remove(word.word);
+        jsonObject.remove(word.word.toLowerCase());
         saveDictionary(jsonObject);
         System.out.println("Word removed");
     }

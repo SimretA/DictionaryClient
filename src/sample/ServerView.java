@@ -11,6 +11,17 @@ import javafx.stage.Stage;
 import java.util.List;
 
 public class ServerView extends Application {
+    /**
+     *Done by:
+     *
+     * Selam G/hiwot ATR/2042/09 - ghiwotselam@gmail.com
+     * Segni Habulu ATR/6492/09 - segnih8@gmail.com
+     * Simret Araya ATR/6579/09 - simretaraya7@gmail.com
+     * Yeabsira Tesfaye ATR/7874/09 - tesfayeyeabsira0@gmail.com
+     * Zekaryas Tadele ATR/8749/09 - zekaryasdinku@gmail.com
+     *
+     * Section 3
+     * **/
 
 
     @Override

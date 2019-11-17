@@ -19,7 +19,7 @@
         </content>
       </ScrollPane>
       <Button fx:id="connectButton" layoutX="471.0" layoutY="257.0" mnemonicParsing="false" onMouseClicked="#connectServer" prefHeight="26.0" prefWidth="91.0" text="Connect" />
-      <Button fx:id="disconnectButton" disable="true" layoutX="476.0" layoutY="320.0" mnemonicParsing="false" onMouseClicked="#disconnectServer" text="Disconnect" />
+      <Button fx:id="disconnectButton" disable="true" layoutX="476.0" layoutY="320.0" mnemonicParsing="false" onMouseClicked="#disconnectServer" prefHeight="26.0" prefWidth="91.0" text="Exit" />
       <Label layoutX="463.0" layoutY="30.0" prefHeight="16.0" prefWidth="91.0" text="Port" />
       <Text fx:id="portText" layoutX="462.0" layoutY="62.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="122.7294921875" />
       <Label layoutX="463.0" layoutY="107.0" prefHeight="16.0" prefWidth="91.0" text="File" />
