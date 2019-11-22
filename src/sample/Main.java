@@ -43,10 +43,17 @@ public class Main extends Application {
             System.out.println("Invalid port number.");
             System.exit(1);
         }
+        Client.getClient();
 
         primaryStage.show();
     }
 
+    @Override
+    public void stop() throws Exception {
+        super.stop();
+        Client.getClient().sendRequest(new SocketObject(null, "EXIT"));
+        System.exit(0);
+    }
 
     public static void main(String[] args) {
 

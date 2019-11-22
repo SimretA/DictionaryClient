@@ -27,6 +27,7 @@ public class Controller {
 
     private Word currentWord =null;
 
+    private Client client;
 
     public void search(MouseEvent mouseEvent) {
         if(wordInput.getText().trim().equals("")){
@@ -35,7 +36,7 @@ public class Controller {
         }
 
         searchRequired.setVisible(false);
-        Client client = new Client(ClientUtility.address, ClientUtility.port);
+        client =  Client.getClient();//new Client(ClientUtility.address, ClientUtility.port);
         SocketObject socketObject = new SocketObject(new Word(wordInput.getText(),null),"GET");
         try {
             SocketObject search_response = client.sendRequest(socketObject);
@@ -62,6 +63,8 @@ public class Controller {
         }
         catch (Exception e){
             System.out.println("something went wrong");
+
+            e.printStackTrace();
         }
         //wordOutput.setText(wordInput.getText());
 
@@ -91,7 +94,7 @@ public class Controller {
             return;
         }
 
-        Client client = new Client(ClientUtility.address, ClientUtility.port);
+        Client client = Client.getClient();//new Client(ClientUtility.address, ClientUtility.port);
         SocketObject socketObject = new SocketObject(new Word(word.getText(),definition.getText()),"POST");
         try {
             SocketObject add_response = client.sendRequest(socketObject);
@@ -125,7 +128,7 @@ public class Controller {
 
         if (alert.getResult() == ButtonType.YES) {
             SocketObject socketObject = new SocketObject(currentWord,"DELETE");
-            Client client= new Client(ClientUtility.address, ClientUtility.port);
+            Client client= Client.getClient();//new Client(ClientUtility.address, ClientUtility.port);
             try {
                 SocketObject response = client.sendRequest(socketObject);
                 if(response.getMethod().equals("OK")){

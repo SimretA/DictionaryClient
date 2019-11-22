@@ -125,6 +125,9 @@ public class ProccessRequest extends Thread {
 
                 }
                 break;
+            case "EXIT":
+                infoDisplay.setText(infoDisplay.getText() +"\nClient disconnected");
+                break;
             default:
                 break;
 

@@ -5,21 +5,25 @@ import javafx.scene.control.ButtonType;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Client {
     private Socket socket = null;
     private ObjectOutputStream objectOutputStream = null;
     private ObjectInputStream objectInputStream = null;
-    //private static Client client = null;
+    public List<SocketObject> requests;
+    private static Client client = null;
 
-//    public static Client getClient() {
-//        if(client ==null){
-//            client = new Client(ClientUtility.address,ClientUtility.port);
-//        }
-//        return client;
-//    }
+    public static Client getClient() {
+        if(client ==null){
+            client = new Client(ClientUtility.address,ClientUtility.port);
+            client.requests = new ArrayList<>();
+        }
+        return client;
+    }
 
-    public Client(String ipAddress, int port){
+    private Client(String ipAddress, int port){
         try {
             socket = new Socket(ipAddress, port);
             System.out.println("Connected");
@@ -27,12 +31,20 @@ public class Client {
             objectInputStream = new ObjectInputStream(socket.getInputStream());
 
         } catch (IOException e) {
-            Alert alert1 = new Alert(Alert.AlertType.INFORMATION, "Connection Error.",  ButtonType.OK);
+            Alert alert1 = new Alert(Alert.AlertType.INFORMATION, "Server not reachable.",  ButtonType.OK);
             alert1.showAndWait();
+
         }
 
     }
     public SocketObject sendRequest(SocketObject socketObject) throws IOException, ClassNotFoundException {
+        if(socketObject.getMethod().equals("EXIT")){
+            objectOutputStream.writeObject(socketObject);
+            objectOutputStream.flush();
+            objectOutputStream.close();
+            objectInputStream.close();
+            socket.close();
+        }
         objectOutputStream.writeObject(socketObject);
         objectOutputStream.flush();
         SocketObject socketObject1 = (SocketObject) objectInputStream.readObject();
@@ -43,6 +55,12 @@ public class Client {
 
 
         //socket.close();
+    }
+    class ClientThread extends Thread{
+
+        public ClientThread(Client client){
+
+        }
     }
 
 }
